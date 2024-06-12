@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 import musicAPI from "../api/musicAPI";
 import UserForm from "../components/UserForm";
 
-export default function RegisterPage() {
+export default function LoginPage() {
   const navigate = useNavigate();
 
   async function handleCredentialResponse(response) {
@@ -41,14 +41,16 @@ export default function RegisterPage() {
 
   const handleSubmit = async (form) => {
     try {
-      await musicAPI.post("/api/users/register", form);
+      const { data } = await musicAPI.post("/api/users/login", form);
+
+      localStorage.access_token = data.access_token;
 
       Swal.fire({
         icon: "success",
         title: "Success",
-        text: "Account created!",
+        text: "Login Succes!",
       });
-      navigate("/login");
+      // navigate("/");
     } catch (error) {
       if (error.response) {
         Swal.fire({
@@ -67,12 +69,12 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="h-screen bg-slate-300 flex flex-row-reverse">
+    <div className="h-screen bg-slate-300 flex ">
       <div className="flex-1 bg-white flex justify-center items-center">
         <div className="outline outline-[#172741] w-1/2 p-10 rounded-2xl ">
-          <h1 className=" mb-8 font-bold text-3xl text-center">Register</h1>
+          <h1 className=" mb-8 font-bold text-3xl text-center">Login</h1>
           <UserForm
-            mode="register"
+            mode="login"
             handleSubmit={handleSubmit}
             handleCredentialResponse={handleCredentialResponse}
           />
