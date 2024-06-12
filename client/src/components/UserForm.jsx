@@ -24,18 +24,18 @@ export default function UserForm({
         placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className="rounded-md mb-4 p-1 outline outline-[#172741]"
+        className="rounded-md mb-4 p-1 outline outline-primary"
       />
       <input
         type="password"
         placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        className="rounded-md mb-4 p-1  outline outline-[#172741]"
+        className="rounded-md mb-4 p-1  outline outline-primary"
       />
       <button
         type="submit"
-        className="rounded-md bg-[#172741] text-white mb-4 p-1"
+        className="rounded-md bg-primary text-white mb-4 p-1"
       >
         {mode === "register" ? "Register" : "Login"}
       </button>
@@ -55,7 +55,7 @@ export default function UserForm({
         <>
           <p className="mt-4 text-xs text-center">
             Already have account?{" "}
-            <Link className="text-[#0a0c0e] font-bold" to="/Login">
+            <Link className="text-primary font-bold" to="/Login">
               Login
             </Link>
           </p>
@@ -63,7 +63,7 @@ export default function UserForm({
       ) : (
         <p className="mt-4 text-xs text-center">
           Dont have account?{" "}
-          <Link className="text-[#0a0c0e] font-bold" to="/register">
+          <Link className="text-primary font-bold" to="/register">
             Register
           </Link>
         </p>

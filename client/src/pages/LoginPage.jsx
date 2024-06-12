@@ -21,7 +21,7 @@ export default function LoginPage() {
         title: "Success",
         text: "Login Succes!",
       });
-      // navigate("/");
+      navigate("/");
     } catch (error) {
       if (error.response) {
         Swal.fire({
@@ -50,7 +50,7 @@ export default function LoginPage() {
         title: "Success",
         text: "Login Succes!",
       });
-      // navigate("/");
+      navigate("/");
     } catch (error) {
       if (error.response) {
         Swal.fire({
@@ -71,7 +71,7 @@ export default function LoginPage() {
   return (
     <div className="h-screen bg-slate-300 flex ">
       <div className="flex-1 bg-white flex justify-center items-center">
-        <div className="outline outline-[#172741] w-1/2 p-10 rounded-2xl ">
+        <div className="outline outline-primary w-1/2 p-10 rounded-2xl ">
           <h1 className=" mb-8 font-bold text-3xl text-center">Login</h1>
           <UserForm
             mode="login"
