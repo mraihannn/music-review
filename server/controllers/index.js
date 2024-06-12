@@ -103,6 +103,11 @@ class Controller {
       const prompt = await Controller.createPromptFromReviews(userReviews);
       // res.json({ prompt });
       let responseAI = await getGeminiResponse(prompt);
+      if (!responseAI.data) {
+        responseAI = await getGeminiResponse(
+          `Generate exactly one song title and do not include any additional text. The song should be a literal song, not just a sound.`
+        );
+      }
       // responseAI = JSON.parse(responseAI);
       const { access_token } = await spotifyToken();
       const { data } = await spotifyAPI.get(
