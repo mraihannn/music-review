@@ -101,13 +101,9 @@ class Controller {
       if (!userReviews.length) throw new CustomError("NotFound");
 
       const prompt = await Controller.createPromptFromReviews(userReviews);
-      // res.json({ prompt });
       let responseAI = await getGeminiResponse(prompt);
-      if (!responseAI.data) {
-        responseAI = await getGeminiResponse(
-          `Generate exactly one song title and do not include any additional text. The song should be a literal song, not just a sound.`
-        );
-      }
+      // res.json({ responseAI });
+
       // responseAI = JSON.parse(responseAI);
       const { access_token } = await spotifyToken();
       const { data } = await spotifyAPI.get(
@@ -166,15 +162,13 @@ class Controller {
       const trackDetails = await Controller.getSpotifyTrackDetails(
         review.spotifyId
       );
-      prompt += `- title: ${trackDetails.name} from ${trackDetails.artists
-        .map((artist) => artist.name)
-        .join(", ")}, Album: ${trackDetails.album.name}, Rating: ${
+      prompt += `- title: ${trackDetails.name}, Rating: ${
         review.rating
       }, Comment: ${review.comment || "No Comment"}\n`;
     }
 
     prompt +=
-      '\nBased on these preferences, generate a song title that would likely have a high rating and a "very good" comment. Generate exactly one song title and do not include any additional text. The song should be a literal song, not just a sound.';
+      "\nBased on these preferences. Generate exactly one song title and do not include any additional text. ";
 
     return prompt;
   }
