@@ -7,6 +7,9 @@ const spotifyToken = require("../helpers/spotifyToken");
 const { User, Review } = require("../models");
 const CustomError = require("../utils/CustomError");
 
+const { OAuth2Client } = require("google-auth-library");
+const client = new OAuth2Client();
+
 class Controller {
   static async register(req, res, next) {
     const { email, password } = req.body;
@@ -23,6 +26,14 @@ class Controller {
     const { email, password } = req.body;
 
     try {
+      if (!email) {
+        throw new CustomError("BadRequest", "Email is required", 400);
+      }
+
+      if (!password) {
+        throw new CustomError("BadRequest", "Password is required", 400);
+      }
+
       const user = await User.findOne({
         where: { email },
       });
@@ -43,6 +54,35 @@ class Controller {
         );
       }
 
+      const access_token = signToken({ id: user.id });
+
+      res.json({ access_token });
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async loginByGoogle(req, res, next) {
+    try {
+      const { google_token } = req.headers;
+
+      const ticket = await client.verifyIdToken({
+        idToken: google_token,
+        audience: process.env.GOOGLE_CLIENT_ID, // Specify the CLIENT_ID of the app that accesses the backend
+        // Or, if multiple clients access the backend:
+        //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+      });
+      const payload = ticket.getPayload();
+      const { sub: id, email, name } = payload;
+
+      const [user, created] = await User.findOrCreate({
+        where: { email },
+        defaults: {
+          username: name,
+          email,
+          password: `${Math.random() * 100}`,
+          goodgleId: id,
+        },
+      });
       const access_token = signToken({ id: user.id });
 
       res.json({ access_token });

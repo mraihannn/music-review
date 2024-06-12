@@ -15,6 +15,7 @@ app.use(cors());
 
 app.post("/api/users/register", Controller.register);
 app.post("/api/users/login", Controller.login);
+app.post("/api/users/login-google", Controller.loginByGoogle);
 
 app.use(require("./middlewares/authentication"));
 
