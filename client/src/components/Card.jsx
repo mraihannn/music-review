@@ -2,7 +2,7 @@ export default function Card({ song }) {
   return (
     <div
       key={song.id}
-      className="bg-primary text-white w-52  h-fit rounded-lg p-2"
+      className="bg-primary text-white w-full sm:w-52  h-fit rounded-lg p-2"
     >
       <div className="w-full h-4/5 ">
         <img

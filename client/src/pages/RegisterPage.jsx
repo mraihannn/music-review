@@ -79,7 +79,7 @@ export default function RegisterPage() {
         </div>
       </div>
 
-      <div className="flex-1 ">
+      <div className="flex-1 hidden lg:block">
         <img
           src="/cover_login.jpeg"
           alt="cover"

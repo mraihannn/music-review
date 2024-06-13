@@ -72,6 +72,7 @@ export default function DetailPage() {
   };
 
   return (
+    // Banner
     <div className="min-h-screen bg-gradient-to-br from-primary to-slate-700">
       <div className="py-10 px-20">
         <div className=" bg-primary rounded-lg p-2 flex gap-2">
@@ -81,10 +82,10 @@ export default function DetailPage() {
             className="w-1/3 object-cover object-center"
           />
           <div className="flex-1 p-3 flex flex-col justify-center">
-            <h1 className="text-7xl font-bold text-white">
+            <h1 className="text-3xl sm:text-7xl font-bold text-white">
               {detail?.data?.name}
             </h1>
-            <h1 className="text-2xl text-white mt-2">
+            <h1 className="text-lg sm:text-2xl text-white mt-2">
               {detail?.data?.artists[0].name}
             </h1>
             <a
