@@ -3,6 +3,7 @@ import musicAPI from "../api/musicAPI";
 import { useDebounce } from "use-debounce";
 import Card from "../components/Card";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { Link } from "react-router-dom";
 
 export default function HomePage() {
   const [input, setInput] = useState("");
@@ -71,11 +72,13 @@ export default function HomePage() {
           dataLength={music.length}
           next={fetchMoreData}
           hasMore={hasMore}
-          loader={<h4>Loading...</h4>}
+          loader={<h4 className="text-white">Loading...</h4>}
         >
           <div className="flex flex-wrap mt-4 gap-3">
             {music.map((song) => (
-              <Card key={song.id} song={song} />
+              <Link key={song.id} to={`/detail/${song.id}`}>
+                <Card song={song} />
+              </Link>
             ))}
           </div>
         </InfiniteScroll>

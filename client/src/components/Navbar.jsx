@@ -7,7 +7,7 @@ export default function Navbar() {
       <Link to="/">
         <div className="w-16 h-16 rounded-full overflow-hidden">
           <img
-            src="logo.jpeg"
+            src="/logo.jpeg"
             className="w-16 h-16 rounded-full object-cover object-center scale-150"
             alt="logo"
           />
