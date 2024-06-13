@@ -187,7 +187,7 @@ export default function DetailPage() {
                     <div className="chat-bubble max-w-full">{r.comment}</div>
                   </div>
                   <div className="rating">
-                    {[...Array(r.rating / 2)].map((_, i) => (
+                    {[...Array(Math.floor(r.rating / 2))].map((_, i) => (
                       <FaStar
                         key={i}
                         className="mask mask-star-2 bg-orange-400"
