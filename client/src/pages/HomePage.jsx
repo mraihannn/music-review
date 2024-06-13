@@ -65,7 +65,7 @@ export default function HomePage() {
           placeholder="Type any song"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          className="w-full mt-4 p-1 rounded-lg"
+          className="w-full mt-4 rounded-lg input"
         />
 
         <InfiniteScroll
