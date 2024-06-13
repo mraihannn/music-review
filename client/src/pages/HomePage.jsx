@@ -73,11 +73,10 @@ export default function HomePage() {
           hasMore={hasMore}
           loader={<h4>Loading...</h4>}
         >
-          {" "}
           <div className="flex flex-wrap mt-4 gap-3">
             {music.map((song) => (
               <Card key={song.id} song={song} />
-            ))}{" "}
+            ))}
           </div>
         </InfiniteScroll>
       </div>
