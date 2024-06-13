@@ -7,8 +7,6 @@ const app = express();
 const cors = require("cors");
 const Controller = require("./controllers");
 
-const port = 3000;
-
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
@@ -27,6 +25,4 @@ app.post("/api/reviews/:spotifyId", Controller.createReview);
 
 app.use(require("./middlewares/errorHandler"));
 
-app.listen(port, () => {
-  console.log(`listeting to port ${port}`);
-});
+module.exports = app;
