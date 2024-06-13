@@ -150,7 +150,7 @@ class Controller {
         `/search?q=track%3A${responseAI.replace(
           " ",
           "+"
-        )}&type=track&limit=10&offset=0`,
+        )}&type=track&limit=12&offset=0`,
         {
           headers: {
             Authorization: `Bearer ${access_token}`,

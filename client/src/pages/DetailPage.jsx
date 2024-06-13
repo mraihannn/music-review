@@ -4,6 +4,8 @@ import musicAPI from "../api/musicAPI";
 import { ImSpotify } from "react-icons/im";
 import Swal from "sweetalert2";
 import { FaStar } from "react-icons/fa";
+import { getDetail } from "../store/movie";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function DetailPage() {
   const [detail, setDetail] = useState({});
@@ -11,6 +13,9 @@ export default function DetailPage() {
   const [comment, setComment] = useState("");
 
   const { spotifyId } = useParams();
+
+  const dispatch = useDispatch();
+  // const detail = useSelector((state) => state.data);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,6 +26,7 @@ export default function DetailPage() {
       });
       setDetail(data);
     };
+    // dispatch(getDetail(spotifyId));
     fetchData();
   }, [spotifyId]);
 
@@ -112,7 +118,7 @@ export default function DetailPage() {
                 onChange={(e) => {
                   setComment(e.target.value);
                 }}
-                className="w-full rounded-lg textarea resize-none h-20"
+                className="w-full rounded-lg textarea  resize-none h-20"
               ></textarea>
               <div className="flex justify-between items-center">
                 <div className="rating">
