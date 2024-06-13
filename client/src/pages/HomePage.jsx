@@ -1,15 +1,22 @@
 import { useEffect, useState } from "react";
 import musicAPI from "../api/musicAPI";
+import { useDebounce } from "use-debounce";
+import Card from "../components/Card";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export default function HomePage() {
   const [input, setInput] = useState("");
   const [music, setMusic] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
+  const [offset, setOffset] = useState(0);
+
+  const [value] = useDebounce(input, 1500);
 
   useEffect(() => {
     const fetchData = async () => {
       const { data } = await musicAPI.get("/api/music/search", {
         params: {
-          q: input,
+          q: value,
           limit: 10,
           offset: 0,
         },
@@ -17,13 +24,36 @@ export default function HomePage() {
           author: `Bearer ${localStorage.access_token}`,
         },
       });
-      setMusic(data);
+      if (data.tracks.items.length > 0) {
+        setMusic(data.tracks.items);
+        setOffset(10);
+      } else {
+        setHasMore(false);
+      }
     };
 
+    setMusic([]);
     fetchData();
-  }, [input]);
+  }, [value]);
 
-  console.log(music);
+  const fetchMoreData = async () => {
+    const { data } = await musicAPI.get("/api/music/search", {
+      params: {
+        q: input,
+        limit: 10,
+        offset: offset,
+      },
+      headers: {
+        author: `Bearer ${localStorage.access_token}`,
+      },
+    });
+    if (data.tracks.items.length > 0) {
+      setMusic((prevMusic) => [...prevMusic, ...data.tracks.items]);
+      setOffset((prevOffset) => prevOffset + 10);
+    } else {
+      setHasMore(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary to-slate-700">
@@ -36,24 +66,20 @@ export default function HomePage() {
           onChange={(e) => setInput(e.target.value)}
           className="w-full mt-4 p-1 rounded-lg"
         />
-        <div className="flex flex-wrap mt-4 gap-3">
-          {music?.tracks?.items.map((item) => (
-            <div
-              key={item.id}
-              className="bg-primary text-white w-52  h-fit rounded-lg p-2"
-            >
-              <div className="w-full h-4/5 ">
-                <img
-                  src={item.album.images[0].url}
-                  className="w-full h-full rounded-lg object-cover object-center"
-                  alt="artist"
-                />
-              </div>
-              <h3 className="font-medium mt-1">{item.name}</h3>
-              <p className="text-xs ">{item.artists.map((a) => a.name)}</p>
-            </div>
-          ))}
-        </div>
+
+        <InfiniteScroll
+          dataLength={music.length}
+          next={fetchMoreData}
+          hasMore={hasMore}
+          loader={<h4>Loading...</h4>}
+        >
+          {" "}
+          <div className="flex flex-wrap mt-4 gap-3">
+            {music.map((song) => (
+              <Card key={song.id} song={song} />
+            ))}{" "}
+          </div>
+        </InfiniteScroll>
       </div>
     </div>
   );
