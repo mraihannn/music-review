@@ -84,11 +84,15 @@ export default function HomePage() {
             Recommendations For You
           </h1>
           <div className="flex flex-wrap gap-3 mt-4">
-            {recommendations?.map((song) => (
-              <Link key={song.id} to={`/detail/${song.id}`}>
-                <Card song={song} />
-              </Link>
-            ))}
+            {loading ? (
+              <h1>Loading...</h1>
+            ) : (
+              recommendations?.map((song) => (
+                <Link key={song.id} to={`/detail/${song.id}`}>
+                  <Card song={song} />
+                </Link>
+              ))
+            )}
           </div>
         </div>
         <div className="mt-3">
