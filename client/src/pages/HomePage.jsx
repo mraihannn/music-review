@@ -78,9 +78,9 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary to-slate-700">
-      <div className="py-10 px-20">
+      <div className="py-10 px-10 sm:px-20">
         <div>
-          <h1 className="text-4xl font-medium text-white">
+          <h1 className="text-xl sm:text-4xl font-medium text-white">
             Recommendations For You
           </h1>
           <div className="flex flex-wrap gap-3 mt-4">
@@ -92,7 +92,7 @@ export default function HomePage() {
           </div>
         </div>
         <div className="mt-3">
-          <h1 className="text-4xl font-medium text-white">Search</h1>
+          <h1 className="text-xl sm:text-4xl font-medium text-white">Search</h1>
           <input
             type="text"
             placeholder="Type any song"

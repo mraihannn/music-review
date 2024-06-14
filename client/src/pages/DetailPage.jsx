@@ -74,7 +74,7 @@ export default function DetailPage() {
   return (
     // Banner
     <div className="min-h-screen bg-gradient-to-br from-primary to-slate-700">
-      <div className="py-10 px-20">
+      <div className="py-10 px-4 sm:px-20">
         <div className=" bg-primary rounded-lg p-2 flex gap-2">
           <img
             src={detail?.data?.album?.images[0].url}
