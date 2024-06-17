@@ -52,14 +52,12 @@ export default function UserForm({
         }}
       />
       {mode === "register" ? (
-        <>
-          <p className="mt-4 text-xs text-center">
-            Already have account?{" "}
-            <Link className="text-primary font-bold" to="/Login">
-              Login
-            </Link>
-          </p>
-        </>
+        <p className="mt-4 text-xs text-center">
+          Already have account?{" "}
+          <Link className="text-primary font-bold" to="/Login">
+            Login
+          </Link>
+        </p>
       ) : (
         <p className="mt-4 text-xs text-center">
           Dont have account?{" "}

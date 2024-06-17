@@ -1,80 +1,33 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import musicAPI from "../api/musicAPI";
 import { ImSpotify } from "react-icons/im";
-import Swal from "sweetalert2";
 import { FaStar } from "react-icons/fa";
-import { getDetail } from "../store/movie";
+import { addReview, getDetail } from "../store/movieRecommedations";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function DetailPage() {
-  const [detail, setDetail] = useState({});
   const [rating, setRating] = useState(2);
   const [comment, setComment] = useState("");
 
   const { spotifyId } = useParams();
 
   const dispatch = useDispatch();
-  // const detail = useSelector((state) => state.data);
+  const detail = useSelector((state) => state.movieRecommendations.detail);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const { data } = await musicAPI.get(`/api/music/${spotifyId}`, {
-        headers: {
-          author: `Bearer ${localStorage.access_token}`,
-        },
-      });
-      setDetail(data);
-    };
-    // dispatch(getDetail(spotifyId));
-    fetchData();
+    dispatch(getDetail(spotifyId));
   }, [spotifyId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const { data } = await musicAPI.post(
-        `/api/reviews/${spotifyId}`,
-        {
-          spotifyId,
-          rating,
-          comment,
-        },
-        {
-          headers: {
-            author: `Bearer ${localStorage.access_token}`,
-          },
-        }
-      );
-      Swal.fire({
-        icon: "success",
-        title: "Success",
-        text: "Review added!",
-      });
-      setDetail((prev) => {
-        return { ...prev, reviews: [...prev.reviews, data] };
-      });
-    } catch (error) {
-      if (error.response) {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: error.response.data.message,
-        });
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "Somethings Gone Wrong!",
-        });
-      }
-    }
+
+    dispatch(addReview(spotifyId, rating, comment));
   };
 
   return (
-    // Banner
     <div className="min-h-screen bg-gradient-to-br from-primary to-slate-700">
       <div className="py-10 px-4 sm:px-20">
+        {/* Banner */}
         <div className=" bg-primary rounded-lg p-2 flex gap-2">
           <img
             src={detail?.data?.album?.images[0].url}
@@ -176,26 +129,24 @@ export default function DetailPage() {
 
           {/* Comment */}
           <div className="flex flex-col border-t">
-            {detail?.reviews
-              ?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-              .map((r) => (
-                <div
-                  key={r.id}
-                  className="text-white mt-4 flex gap-2 items-center"
-                >
-                  <div className="chat chat-start ">
-                    <div className="chat-bubble max-w-full">{r.comment}</div>
-                  </div>
-                  <div className="rating">
-                    {[...Array(Math.floor(r.rating / 2))].map((_, i) => (
-                      <FaStar
-                        key={i}
-                        className="mask mask-star-2 bg-orange-400"
-                      />
-                    ))}
-                  </div>
+            {detail?.reviews?.map((r) => (
+              <div
+                key={r.id}
+                className="text-white mt-4 flex gap-2 items-center"
+              >
+                <div className="chat chat-start ">
+                  <div className="chat-bubble max-w-full">{r.comment}</div>
                 </div>
-              ))}
+                <div className="rating">
+                  {[...Array(Math.floor(r.rating / 2))].map((_, i) => (
+                    <FaStar
+                      key={i}
+                      className="mask mask-star-2 bg-orange-400"
+                    />
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

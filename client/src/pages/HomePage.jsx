@@ -1,79 +1,45 @@
 import { useEffect, useState } from "react";
-import musicAPI from "../api/musicAPI";
 import { useDebounce } from "use-debounce";
 import Card from "../components/Card";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getRecommendations } from "../store/movie";
+import {
+  getMoreSearch,
+  getRecommendations,
+  searchMusic,
+} from "../store/movieRecommedations";
 
 export default function HomePage() {
   const [input, setInput] = useState("");
-  const [music, setMusic] = useState([]);
-  const [hasMore, setHasMore] = useState(true);
-  const [offset, setOffset] = useState(0);
+  // const [music, setMusic] = useState([]);
+  const music = useSelector((state) => state.movieRecommendations.search);
+  // const [hasMore, setHasMore] = useState(true);
+  const hasMore = useSelector((state) => state.movieRecommendations.hasMore);
+  // const [offset, setOffset] = useState(0);
+  // const offset = useSelector((state) => state.movieRecommendations.offset);
 
   const [value] = useDebounce(input, 1500);
 
   const dispatch = useDispatch();
-  const recommendations = useSelector((state) => state.data);
-  const loading = useSelector((state) => state.loading);
-  const error = useSelector((state) => state.error);
+  const recommendations = useSelector(
+    (state) => state.movieRecommendations.data
+  );
+
+  const loading = useSelector((state) => state.movieRecommendations.movie);
 
   useEffect(() => {
     dispatch(getRecommendations());
-    // const fetchRecommendations = async () => {
-    //   const { data } = await musicAPI.get("/api/music/recommendations", {
-    //     headers: {
-    //       author: `Bearer ${localStorage.access_token}`,
-    //     },
-    //   });
-    //   setRecommendations(data.data.tracks.items);
-    // };
-    // fetchRecommendations();
   }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const { data } = await musicAPI.get("/api/music/search", {
-        params: {
-          q: value,
-          limit: 10,
-          offset: 0,
-        },
-        headers: {
-          author: `Bearer ${localStorage.access_token}`,
-        },
-      });
-      if (data.tracks.items.length > 0) {
-        setMusic(data.tracks.items);
-        setOffset(10);
-      } else {
-        setHasMore(false);
-      }
-    };
-
-    setMusic([]);
-    fetchData();
+    if (value) {
+      dispatch(searchMusic(value));
+    }
   }, [value]);
 
   const fetchMoreData = async () => {
-    const { data } = await musicAPI.get("/api/music/search", {
-      params: {
-        q: input,
-        limit: 10,
-        offset: offset,
-      },
-      headers: {
-        author: `Bearer ${localStorage.access_token}`,
-      },
-    });
-    if (data.tracks.items.length > 0) {
-      setMusic((prevMusic) => [...prevMusic, ...data.tracks.items]);
-      setOffset((prevOffset) => prevOffset + 10);
-    } else {
-      setHasMore(false);
-    }
+    dispatch(getMoreSearch(input));
   };
 
   return (
